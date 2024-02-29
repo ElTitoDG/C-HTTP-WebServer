@@ -5,9 +5,13 @@
 //#include <errno.h>
 
 #define PORT 8080
+#define BUFFER_SIZE 1024
 
 int main()
 {
+
+    char buffer[BUFFER_SIZE];
+
     //Creamos el socket || sockfd == socket file descriptor
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if(sockfd == -1)
@@ -53,6 +57,14 @@ int main()
             return 1;
         }
         printf("Connection accepted\n");
+
+        //Leemos del socket
+        int valread = read(newsockfd, buffer, BUFFER_SIZE);
+        if (valread < 0)
+        {
+            perror("webserver (read)");
+            continue;
+        }
 
         close(newsockfd);
     }
