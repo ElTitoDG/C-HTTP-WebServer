@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
+#include <unistd.h>
 //#include <errno.h>
 
 #define PORT 8080
@@ -31,6 +32,30 @@ int main()
         return 1;
     }
     printf("Socket successfully bound to address\n");
+
+    //Escuchando conexiones entrantes
+    if (listen(sockfd, SOMAXCONN) != 0)
+    {
+        perror("webserver (listen)");
+        return 1;
+    }
+    printf("Server listening for connections\n");
+
+    //Bucle infinito para aceptar conexiones
+    for (;;)
+    {
+        //Aceptamos conexiones entrantes
+        int newsockfd = accept(sockfd, (struct sockaddr *)&host_addr, (socklen_t *)&host_addrlen);
+
+        if (newsockfd < 0)
+        {
+            perror("webserver (accept)");
+            return 1;
+        }
+        printf("Connection accepted\n");
+
+        close(newsockfd);
+    }
 
     return 0;
 }
