@@ -1,2 +1,4 @@
 build
 .cache/clangd/index
+.vscode
+.DS_Store

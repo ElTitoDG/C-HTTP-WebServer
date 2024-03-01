@@ -12,14 +12,7 @@
 int main()
 {
   char buffer[BUFFER_SIZE];
-  char resp[] = "HTTP/1.0 200 OK\r\n"
-                "Server: webserver-c\r\n"
-                "Content-type: text/html\r\n\r\n"
-                "<html>hello, world</html>\r\n"
-                "<html>From C WebServer</html>\r\n";
-
-
-
+  char *resp;
   char *file_content = malloc(MAX_FILE_SIZE);
   if (!file_content)
   {
@@ -62,7 +55,8 @@ int main()
     perror("webserver (listen)");
     return 1;
   }
-  printf("Servidor a la espera de conexiones\n");
+  printf("Servidor a la espera de conexiones en http://%s:%u/\n\n", inet_ntoa(client_addr.sin_addr),
+         ntohs(client_addr.sin_port));
 
   // Bucle infinito para aceptar conexiones
   for (;;) {
@@ -131,14 +125,26 @@ int main()
             continue;
         }
         fclose(file);
-    }
 
-    //Respuesta al cliente
-    sprintf(resp, "HTTP/1.0 200 OK\r\n"
-                    "Server: webserver-c\r\n"
-                    "Content-type: text/html\r\n"
-                    "Content-Length: %lu\r\n\r\n"
-                    "%s", strlen(file_content), file_content);
+        // Asignar memoria dinámicamente para resp
+        resp = malloc(strlen("HTTP/1.0 200 OK\r\n"
+                              "Server: webserver-c\r\n"
+                              "Content-type: text/html\r\n"
+                              "Content-Length: %lu\r\n\r\n"
+                              "%s") + file_size);
+        if (!resp)
+        {
+            perror("webserver (malloc)");
+            continue;
+        }
+
+        //Respuesta al cliente
+        sprintf(resp, "HTTP/1.0 200 OK\r\n"
+                        "Server: webserver-c\r\n"
+                        "Content-type: text/html\r\n"
+                        "Content-Length: %lu\r\n\r\n"
+                        "%s", strlen(file_content), file_content);
+    }
 
     // Escribir en el socket
     int valwrite = write(newsockfd, resp, strlen(resp));
@@ -152,6 +158,7 @@ int main()
   }
 
   free(file_content);
+  free(resp);
 
   return 0;
 }
