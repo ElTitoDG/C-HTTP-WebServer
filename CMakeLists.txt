@@ -5,4 +5,4 @@ project(WebServer)
 add_executable(WebServer webserver.c)
 
 set_property(TARGET WebServer PROPERTY C_STANDARD 23)
-set(CMAKE_C_FLAGS "-Wall")
+set(CMAKE_C_FLAGS "-Wall -arch arm64 -g")
