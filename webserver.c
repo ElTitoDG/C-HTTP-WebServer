@@ -99,7 +99,7 @@ int main()
 
     if (strcmp(uri, "/") == 0)
     {
-        FILE *file = fopen("index.html", "r");
+        FILE *file = fopen("../docs/index.html", "r");
         if (file == NULL)
         {
             perror("webserver (fopen)");
