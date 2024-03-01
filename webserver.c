@@ -1,3 +1,5 @@
+// C Web Server that only server the file index.html
+
 #include <arpa/inet.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -5,9 +7,9 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#define PORT 8080
+#define PORT 8080 // Puerto predeterminado
 #define BUFFER_SIZE 1024
-#define MAX_FILE_SIZE 209715200 // 200Mb
+#define MAX_FILE_SIZE 524288000 // 500Mb
 
 int main()
 {
