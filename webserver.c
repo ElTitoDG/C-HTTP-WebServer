@@ -3,12 +3,12 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
-// #include <errno.h>
+
 
 #define PORT 8080
 #define BUFFER_SIZE 1024
 
-int main() 
+int main()
 {
   char buffer[BUFFER_SIZE];
   char resp[] = "HTTP/1.0 200 OK\r\n"
@@ -19,7 +19,7 @@ int main()
 
   // Creamos el socket || sockfd == socket file descriptor
   int sockfd = socket(AF_INET, SOCK_STREAM, 0);
-  if (sockfd == -1) 
+  if (sockfd == -1)
   {
     perror("webserver (socket)");
     return 1;
@@ -39,7 +39,7 @@ int main()
   int client_addrlen = sizeof(client_addr);
 
   // Vincular socket a la dirección
-  if (bind(sockfd, (struct sockaddr *)&host_addr, host_addrlen) != 0) 
+  if (bind(sockfd, (struct sockaddr *)&host_addr, host_addrlen) != 0)
   {
     perror("webserver (bind)");
     return 1;
@@ -47,7 +47,7 @@ int main()
   printf("Socket successfully bound to address\n");
 
   // Escuchando conexiones entrantes
-  if (listen(sockfd, SOMAXCONN) != 0) 
+  if (listen(sockfd, SOMAXCONN) != 0)
   {
     perror("webserver (listen)");
     return 1;
@@ -60,7 +60,7 @@ int main()
     int newsockfd = accept(sockfd, (struct sockaddr *)&host_addr,
                            (socklen_t *)&host_addrlen);
 
-    if (newsockfd < 0) 
+    if (newsockfd < 0)
     {
       perror("webserver (accept)");
       return 1;
@@ -70,7 +70,7 @@ int main()
     // Sacamos la direccion del cliente
     int sockn = getsockname(newsockfd, (struct sockaddr *)&client_addr,
                             (socklen_t *)&client_addrlen);
-    if (sockn < 0) 
+    if (sockn < 0)
     {
       perror("webserver (getsockname)");
       continue;
@@ -78,7 +78,7 @@ int main()
 
     // Leemos del socket
     int valread = read(newsockfd, buffer, BUFFER_SIZE);
-    if (valread < 0) 
+    if (valread < 0)
     {
       perror("webserver (read)");
       continue;
@@ -92,7 +92,7 @@ int main()
 
     // Escribir en el socket
     int valwrite = write(newsockfd, resp, strlen(resp));
-    if (valwrite < 0) 
+    if (valwrite < 0)
     {
       perror("webserver (write)");
       continue;
