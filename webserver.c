@@ -69,10 +69,10 @@ void handle_request(int newsockfd, char *file_content, struct sockaddr_in *clien
         exit(1);
     }
 
-    // Leemos la peticion
+    // Leemos la petición
     char method[buffer_size], uri[buffer_size], version[buffer_size];
     sscanf(buffer, "%s %s %s", method, uri, version);
-    printf("[%s:%u]\n Metodo: %s\n URI: %s\n Version: %s\n", inet_ntoa(client_addr->sin_addr),
+    printf("[%s:%u]\n Método: %s\n URI: %s\n Version: %s\n", inet_ntoa(client_addr->sin_addr),
            ntohs(client_addr->sin_port), method, uri, version);
 
     if (strcmp(uri, "/") == 0)
@@ -155,7 +155,7 @@ int main()
 
     int sockfd = setup_server();
 
-    // Configuracion para sacar la direccion del cliente
+    // Configuración para sacar la dirección del cliente
     struct sockaddr_in client_addr;
     int client_addrlen = sizeof(client_addr);
 
@@ -181,8 +181,8 @@ int main()
         close(newsockfd);
     }
 
-    free(file_content);
-    close(sockfd);
+    //free(file_content);
+    //close(sockfd);
 
-    return 0;
+    //return 0;
 }
